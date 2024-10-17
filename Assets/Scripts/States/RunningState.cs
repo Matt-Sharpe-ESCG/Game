@@ -6,13 +6,13 @@ namespace Player
     public class RunningState : State
     {
         // constructor
-        public RunningState(PlayerScript player, StateMachine sm) : base(player, sm)
+        public RunningState(EnemyController player, StateMachine sm) : base(player, sm)
         {
         }
 
         public override void Enter()
         {
-            player.animator.Play("Running", 0, 0);
+            player.animator.Play("Running");
             base.Enter();
         }
 
@@ -37,6 +37,21 @@ namespace Player
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+
+            // Get the distance to the player
+            player.distance = Vector3.Distance(player.target.position, player.transform.position);
+
+            // If inside the radius
+            if (player.distance <= player.lookRadius)
+            {
+                // Move towards the player
+                player.agent.SetDestination(player.target.position);
+                if (player.distance <= player.agent.stoppingDistance)
+                {
+                    // Attack
+                    player.FaceTarget();
+                }
+            }
         }
     }
 }

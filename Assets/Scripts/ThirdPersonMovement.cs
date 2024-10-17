@@ -64,11 +64,11 @@ public class ThirdPersonMovement : MonoBehaviour
         //Animation
         if (direction.magnitude >= 0.1f)
         {
-            anim.Play("Running");
+            anim.SetBool("Move", true);
         }
         else
         {
-            anim.Play("Idle");
+            anim.SetBool("Move", false);
         }
     }
     private void OnCollisionEnter(Collision collision)

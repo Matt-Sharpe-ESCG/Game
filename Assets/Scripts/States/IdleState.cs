@@ -5,7 +5,7 @@ namespace Player
     public class IdleState : State
     {
         // constructor
-        public IdleState(PlayerScript player, StateMachine sm) : base(player, sm)
+        public IdleState(EnemyController player, StateMachine sm) : base(player, sm)
         {
         }
 

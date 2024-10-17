@@ -6,11 +6,11 @@ namespace Player
 {
     public abstract class State
     {
-        protected PlayerScript player;
+        protected EnemyController player;
         protected StateMachine sm;
 
         // base constructor
-        protected State(PlayerScript player, StateMachine sm)
+        protected State(EnemyController player, StateMachine sm)
         {
             this.player = player;
             this.sm = sm;

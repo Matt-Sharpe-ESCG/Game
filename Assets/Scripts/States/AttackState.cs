@@ -6,7 +6,7 @@ namespace Player
     public class AttackState : State
     {
         // constructor
-        public AttackState(PlayerScript player, StateMachine sm) : base(player, sm)
+        public AttackState(EnemyController player, StateMachine sm) : base(player, sm)
         {
         }
 
