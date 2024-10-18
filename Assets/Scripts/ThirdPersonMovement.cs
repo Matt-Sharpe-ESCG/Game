@@ -12,6 +12,10 @@ public class ThirdPersonMovement : MonoBehaviour
     public GameObject enemiesEnd;
     public GameObject player;
     public GameObject deathScreen;
+    public GameObject winScreen;
+    public GameObject pauseButton;
+    public GameObject listControls;
+    public MeshRenderer zoneMesh;
     public Animator anim;
 
     // Game Asset Values
@@ -70,6 +74,19 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             anim.SetBool("Move", false);
         }
+
+        // Sprint 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            speed = 10;
+            anim.SetBool("Sprinting", true);
+        }
+        else
+        {
+            anim.SetBool("Sprinting", false);
+            speed = 5;
+        }
+
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -79,10 +96,30 @@ public class ThirdPersonMovement : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "WinZone")
+        {
+            WinGame();
+        }
+    }
+
+    void WinGame()
+    {
+        zoneMesh.enabled = false;
+        enemiesEnd.SetActive(false);
+        winScreen.SetActive(true);
+        listControls.SetActive(false);
+        pauseButton.SetActive(false);
+        speed = 0f;
+        anim.Play("Winner");
+    }
     void killPlayer()
     {
         enemiesEnd.SetActive(false);
         deathScreen.SetActive(true);
+        listControls.SetActive(false);
+        pauseButton.SetActive(false);
         speed = 0f;
         anim.Play("Idle");
     }

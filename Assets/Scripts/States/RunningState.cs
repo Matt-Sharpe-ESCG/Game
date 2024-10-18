@@ -12,7 +12,8 @@ namespace Player
 
         public override void Enter()
         {
-            player.animator.Play("Running");
+            player.animator.Play("Walk");
+            player.agent.speed = 8;
             base.Enter();
         }
 
@@ -32,26 +33,26 @@ namespace Player
             base.LogicUpdate();
             player.CheckForIdle();
             player.CheckForAttack();
+
+            if (!player.agent.pathPending && player.agent.remainingDistance < 0.5f)
+            {
+                GoToNextPoint();
+            }
         }
 
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+        }
 
-            // Get the distance to the player
-            player.distance = Vector3.Distance(player.target.position, player.transform.position);
-
-            // If inside the radius
-            if (player.distance <= player.lookRadius)
+        void GoToNextPoint()
+        {
+            if (player.aiPoints.Length == 0)
             {
-                // Move towards the player
-                player.agent.SetDestination(player.target.position);
-                if (player.distance <= player.agent.stoppingDistance)
-                {
-                    // Attack
-                    player.FaceTarget();
-                }
+                return;
             }
+            player.agent.destination = player.aiPoints[player.destPoint].position;
+            player.destPoint = (player.destPoint + 1) % player.aiPoints.Length;
         }
     }
 }

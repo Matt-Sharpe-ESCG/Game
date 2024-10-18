@@ -11,6 +11,8 @@ namespace Player
 {
 	public class EnemyController : MonoBehaviour
 	{
+		public Transform[] aiPoints;
+		public int destPoint;
 
 		public float lookRadius = 10f;
 		public float distance;
@@ -20,7 +22,6 @@ namespace Player
 		public NavMeshAgent agent;
 		public GameObject player;
 
-		public Rigidbody rb;
 		public StateMachine sm;
 		public Animator animator;
 
@@ -33,10 +34,6 @@ namespace Player
 		void Start()
 		{
 			target = player.transform;
-			agent = GetComponent<NavMeshAgent>();
-
-			sm = gameObject.AddComponent<StateMachine>();
-			animator = gameObject.GetComponent<Animator>();
 
 			// add new states here
 			idleState = new IdleState(this, sm);
@@ -47,30 +44,37 @@ namespace Player
 			sm.Init(idleState);
 		}
 
-		void FixedUpdate()
+        void Update()
+        {
+			sm.CurrentState.LogicUpdate();   
+			Debug.Log(sm.CurrentState.ToString());
+        }
+
+        void FixedUpdate()
 		{
 			sm.CurrentState.PhysicsUpdate();
 		}
 
 		public void CheckForIdle()
 		{
-			if (speed == 0)
-			{
+			if (agent.velocity.magnitude == 0)
+            {
 				sm.ChangeState(idleState);
-			}
+			}			
 		}
 
 		public void CheckForRun()
 		{
-			if (speed > 0)
-            {
-				sm.ChangeState(runningState);
-			}		
+			sm.ChangeState(runningState);
 		}
 
 		public void CheckForAttack()
 		{
-			if (Input.GetKeyDown(KeyCode.Return))
+			// Get the distance to the player
+			distance = Vector3.Distance(target.position, transform.position);
+
+			// If inside the radius
+			if (distance <= lookRadius)
 			{
 				sm.ChangeState(attackState);
 			}

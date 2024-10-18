@@ -12,7 +12,7 @@ namespace Player
 
         public override void Enter()
         {
-            player.animator.Play("Punching", 0, 0);
+            player.animator.Play("Running");
             base.Enter();
         }
 
@@ -31,12 +31,20 @@ namespace Player
         {
             base.LogicUpdate();
             player.CheckForIdle();
-            player.CheckForRun();
         }
 
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+
+            // Move towards the player
+            player.agent.SetDestination(player.target.position);
+
+            if (player.distance <= player.agent.stoppingDistance)
+            {
+                // Attack
+                player.FaceTarget();
+            }
         }
     }
 }
