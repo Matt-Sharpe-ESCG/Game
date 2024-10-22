@@ -3,10 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.VFX;
-using UnityEditor.SceneManagement;
 
-
-/* Makes enemies follow and attack the player */
 namespace Player
 {
 	public class EnemyController : MonoBehaviour
